@@ -1,7 +1,14 @@
-import { ClipboardList, PlusCircle } from "lucide-react";
+import { useState } from "react";
+import { Check, ClipboardList, PlusCircle, Trash2 } from "lucide-react";
 import logo from './assets/logo.svg';
 
 export function App() {
+  const [isChecked, setIsChecked] = useState(false);
+
+  function handleToogleCheckButton() {
+    setIsChecked(!isChecked);
+  }
+
   return (
     <body className="bg-gray-600 text-gray-100 h-screen">
       {/* background overlay */}
@@ -52,13 +59,44 @@ export function App() {
                 </span>
               </div>
 
-              <div className="mt-6 py-16 flex flex-col items-center justify-center gap-4 border-t border-gray-400 rounded-lg">
+              {/* <div className="mt-6 py-16 flex flex-col items-center justify-center gap-4 border-t border-gray-400 rounded-lg">
                 <ClipboardList size={96} className="text-gray-400"/>
 
                 <p className="text-gray-300 text-base text-center leading-snug flex flex-col">
                   <span className="font-bold">Você ainda não tem tarefas cadastradas</span>
                   Crie tarefas e organize seus itens a fazer
                 </p>
+              </div> */}
+
+              <div className="mt-6 grid gap-3">
+                <article className="p-4 bg-gray-500 border border-gray-400 rounded-lg flex items-start justify-between gap-3">
+                  <label className="cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={handleToogleCheckButton}
+                      className="hidden"
+                    />
+
+                    <div
+                      className={`w-5 h-5 border-2 rounded-full ${
+                        isChecked ? 'bg-purpleDark border-purpleDark' : 'bg-gray-600 border-blue'
+                      } flex items-center justify-center`}>
+                        
+                      {isChecked && (
+                        <Check size={12}/>
+                      )}
+                    </div>
+                  </label>
+                  
+                  <p className={`text-sm text-left leading-snug max-w-[632px] ${isChecked ? 'line-through text-gray-300' : 'no-underline'}`}>
+                    Integer urna interdum massa libero auctor neque turpis turpis semper. Duis vel sed fames integer.</p>
+
+                  <button className="p-1 text-gray-300 rounded hover:bg-gray-400 hover:text-danger transition-colors">
+                    <Trash2 size={24}/>
+                  </button>
+                </article>
+
               </div>
             </div>
           </div>

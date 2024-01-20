@@ -5,7 +5,7 @@ import logo from './assets/logo.svg';
 export function App() {
   const [isChecked, setIsChecked] = useState(false);
 
-  function handleToogleCheckButton() {
+  function handleToggleCheckButton() {
     setIsChecked(!isChecked);
   }
 
@@ -15,7 +15,7 @@ export function App() {
       <div className="bg-gray-700 h-full max-h-[200px]" />
 
       {/* Container */}
-      <div className="max-w-3xl mx-auto -mt-[126px]">
+      <div className="max-w-3xl mx-auto -mt-[126px] px-6">
         <main>
           <img 
             src={logo} 
@@ -74,7 +74,7 @@ export function App() {
                     <input
                       type="checkbox"
                       checked={isChecked}
-                      onChange={handleToogleCheckButton}
+                      onChange={handleToggleCheckButton}
                       className="hidden"
                     />
 

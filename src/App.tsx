@@ -5,9 +5,66 @@ import { Button } from "./components/Button";
 import { EmptyTask } from "./components/list/EmptyTasks";
 import { ItensTasks } from "./components/list/ItensTasks";
 import { PlusCircle } from "lucide-react";
+import { useState } from "react";
+
+export interface ITask {
+  id: number
+  text: string
+  isChecked: boolean
+}
 
 export function App() {
+  const [tasks, setTasks] = useState<ITask[]>([])
+  const [inputValue, setInputValue] = useState('')
 
+  const checkedTasksCounter = tasks.reduce((prevValue, currentTask) => {
+    if (currentTask.isChecked) {
+      return prevValue + 1
+    }
+
+    return prevValue
+  }, 0)
+
+  function handleAddTask() {
+    if (!inputValue) {
+      return
+    }
+
+    const newTask: ITask = {
+      id: new Date().getTime(),
+      text: inputValue,
+      isChecked: false,
+    }
+
+    setTasks((state) => [...state, newTask])
+    setInputValue('')
+  }
+
+  function handleRemoveTask(id: number) {
+    const filteredTasks = tasks.filter((task) => task.id !== id)
+
+    if (!confirm('Deseja mesmo apagar essa tarefa?')) {
+      return
+    }
+
+    setTasks(filteredTasks)
+  }
+
+  function handleToggleTask({ id, value }: { id: number; value: boolean }) {
+    console.log('Tentando alterar o estado da tarefa:', id, value);
+  
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, isChecked: value };
+      }
+  
+      return { ...task };
+    });
+  
+    console.log('Novo estado das tarefas:', updatedTasks);
+  
+    setTasks(updatedTasks);
+  }
 
   return (
     <body className="bg-gray-600 text-gray-100 h-screen">
@@ -19,25 +76,43 @@ export function App() {
         <main>
 
           <Header />
+          <article className="flex gap-2">
+            <Input 
+              onChange={(e) => setInputValue(e.target.value)}
+              value={inputValue}
+            />
 
-          <form className="flex gap-2">
-            {/* <label htmlFor="newTask">Descrição da tarefa |</label> */}
-            
-            <Input />
-
-            <Button className="p-4 text-sm font-bold leading-snug rounded-lg flex items-center gap-2 bg-blueDark hover:bg-blue transition-colors">
+            <Button 
+              className="p-4 text-sm font-bold leading-snug rounded-lg flex items-center gap-2 bg-blueDark hover:bg-blue transition-colors"
+              onClick={handleAddTask}
+            >
               Criar
               <PlusCircle size={16} />
             </Button>
-          </form>
+          </article>
+            
 
           <div className="mt-16">
             <div>
-              <HeaderList />
+              <HeaderList 
+                tasksCounter={tasks.length}
+                checkedTasksCounter={checkedTasksCounter}
+              />
 
-              <EmptyTask />
-
-              <ItensTasks />
+              {tasks.length > 0 ? (
+                <>
+                  {tasks.map((task) => (
+                    <ItensTasks
+                      key={task.id}
+                      data={task}
+                      removeTask={handleRemoveTask}
+                      toggleTaskStatus={handleToggleTask}
+                    />
+                  ))}
+                </>
+              ) : (
+                <EmptyTask />
+              )}
             </div>
           </div>
         </main>

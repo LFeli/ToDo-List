@@ -1,11 +1,21 @@
 import { Check, Trash2 } from "lucide-react";
-import { useState } from "react";
 
-export function ItensTasks() {
-  const [isChecked, setIsChecked] = useState(false);
+import { ITask } from '../../App'
 
-  function handleToggleCheckButton() {
-    setIsChecked(!isChecked);
+interface ItensTasksProps {
+  data: ITask
+  removeTask: (id: number) => void
+  toggleTaskStatus: ({ id, value }: { id: number; value: boolean }) => void
+}
+
+export function ItensTasks({ data, removeTask, toggleTaskStatus }: ItensTasksProps ) {
+  function handleTaskToggle() {
+    const updatedValue = !data.isChecked;
+    toggleTaskStatus({ id: data.id, value: updatedValue })
+  }
+
+  function handleRemove() {
+    removeTask(data.id)
   }
 
   return (
@@ -14,27 +24,31 @@ export function ItensTasks() {
         <label className="cursor-pointer">
           <input
             type="checkbox"
-            checked={isChecked}
-            onChange={handleToggleCheckButton}
+            checked={data.isChecked}
+            readOnly
             className="hidden"
+            onChange={handleTaskToggle}
           />
 
           <div
             className={`w-5 h-5 border-2 rounded-full ${
-              isChecked ? 'bg-purpleDark border-purpleDark hover:bg-purple hover:border-purple' : 'bg-gray-600 border-blue hover:bg-gray-400'
+              data.isChecked ? 'bg-purpleDark border-purpleDark hover:bg-purple hover:border-purple' : 'bg-gray-600 border-blue hover:bg-gray-400'
             } flex items-center justify-center transition-colors`}>
               
-            {isChecked && (
+            {data.isChecked && (
               <Check size={12}/>
             )}
           </div>
         </label>
         
-        <p className={`text-sm text-left leading-snug max-w-[632px] ${isChecked ? 'line-through text-gray-300' : 'no-underline'}`}>
-          Integer urna interdum massa libero auctor neque turpis turpis semper. Duis vel sed fames integer.
+        <p className={`w-full text-sm text-left leading-snug max-w-[632px] ${data.isChecked ? 'line-through text-gray-300' : 'no-underline'}`}>
+          {data.text}
         </p>
 
-        <button className="p-2 text-gray-300 rounded hover:bg-gray-400 hover:text-danger transition-colors">
+        <button 
+          className="p-2 text-gray-300 rounded hover:bg-gray-400 hover:text-danger transition-colors"
+          onClick={handleRemove}
+        >
           <Trash2 size={20}/>
         </button>
       </article>

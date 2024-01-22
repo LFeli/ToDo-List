@@ -1,17 +1,14 @@
+import { useEffect, useState } from "react";
+import { PlusCircle } from "lucide-react";
+import { ITask } from "./components/interfaces";
+
 import { Header } from "./components/Header";
 import { Header as HeaderList } from "./components/list/Header";
 import { Input } from "./components/Input";
 import { Button } from "./components/Button";
 import { EmptyTask } from "./components/list/EmptyTasks";
 import { ItensTasks } from "./components/list/ItensTasks";
-import { PlusCircle } from "lucide-react";
-import { useEffect, useState } from "react";
 
-export interface ITask {
-  id: number
-  text: string
-  isChecked: boolean
-}
 
 export function App() {
   const [tasks, setTasks] = useState<ITask[]>(() => {
@@ -24,13 +21,7 @@ export function App() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
 
-  const checkedTasksCounter = tasks.reduce((prevValue, currentTask) => {
-    if (currentTask.isChecked) {
-      return prevValue + 1
-    }
-
-    return prevValue
-  }, 0)
+  const checkedTasksCounter = tasks.filter((task) => task.isChecked).length;
 
   function handleAddTask() {
     if (!inputValue) {
@@ -48,28 +39,20 @@ export function App() {
   }
 
   function handleRemoveTask(id: number) {
-    const filteredTasks = tasks.filter((task) => task.id !== id)
-
-    if (!confirm('Deseja mesmo apagar essa tarefa?')) {
-      return
+    const confirmDelete = window.confirm("Deseja mesmo apagar essa tarefa?");
+    if (!confirmDelete) {
+      return;
     }
 
-    setTasks(filteredTasks)
+    const filteredTasks = tasks.filter((task) => task.id !== id);
+    setTasks(filteredTasks);
   }
 
-  function handleToggleTask({ id, value }: { id: number; value: boolean }) {
-    console.log('Tentando alterar o estado da tarefa:', id, value);
-  
-    const updatedTasks = tasks.map((task) => {
-      if (task.id === id) {
-        return { ...task, isChecked: value };
-      }
-  
-      return { ...task };
-    });
-  
-    console.log('Novo estado das tarefas:', updatedTasks);
-  
+  function handleToggleTask(id: number, value: boolean) {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, isChecked: value } : { ...task }
+    );
+
     setTasks(updatedTasks);
   }
 

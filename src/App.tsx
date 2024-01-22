@@ -5,7 +5,7 @@ import { Button } from "./components/Button";
 import { EmptyTask } from "./components/list/EmptyTasks";
 import { ItensTasks } from "./components/list/ItensTasks";
 import { PlusCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface ITask {
   id: number
@@ -14,8 +14,15 @@ export interface ITask {
 }
 
 export function App() {
-  const [tasks, setTasks] = useState<ITask[]>([])
-  const [inputValue, setInputValue] = useState('')
+  const [tasks, setTasks] = useState<ITask[]>(() => {
+    const storedTasks = localStorage.getItem('tasks');
+    return storedTasks ? JSON.parse(storedTasks) : [];
+  });
+  const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
 
   const checkedTasksCounter = tasks.reduce((prevValue, currentTask) => {
     if (currentTask.isChecked) {

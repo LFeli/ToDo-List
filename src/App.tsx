@@ -61,52 +61,47 @@ export function App() {
       {/* background overlay */}
       <div className="bg-gray-700 h-full max-h-[200px]" />
 
-      {/* Container */}
-      <div className="max-w-3xl mx-auto -mt-[126px] px-6">
-        <main>
+      {/* Content */}
+      <main className="max-w-3xl mx-auto -mt-[126px] px-6">
+        <Header />
 
-          <Header />
-          <article className="flex gap-2">
-            <Input 
-              onChange={(e) => setInputValue(e.target.value)}
-              value={inputValue}
-            />
+        <div className="flex gap-2">
+          <Input 
+            onChange={(e) => setInputValue(e.target.value)}
+            value={inputValue}
+          />
 
-            <Button 
-              className="p-4 text-sm font-bold leading-snug rounded-lg flex items-center gap-2 bg-blueDark hover:bg-blue transition-colors"
-              onClick={handleAddTask}
-            >
-              Criar
-              <PlusCircle size={16} />
-            </Button>
-          </article>
-            
+          <Button 
+            className="p-4 text-sm font-bold leading-snug rounded-lg flex items-center gap-2 bg-blueDark hover:bg-blue transition-colors"
+            onClick={handleAddTask}
+          >
+            Criar
+            <PlusCircle size={16} />
+          </Button>
+        </div>
+          
+        <div className="mt-16">
+          <HeaderList 
+            tasksCounter={tasks.length}
+            checkedTasksCounter={checkedTasksCounter}
+          />
 
-          <div className="mt-16">
-            <div>
-              <HeaderList 
-                tasksCounter={tasks.length}
-                checkedTasksCounter={checkedTasksCounter}
-              />
-
-              {tasks.length > 0 ? (
-                <>
-                  {tasks.map((task) => (
-                    <ItensTasks
-                      key={task.id}
-                      data={task}
-                      removeTask={handleRemoveTask}
-                      toggleTaskStatus={handleToggleTask}
-                    />
-                  ))}
-                </>
-              ) : (
-                <EmptyTask />
-              )}
-            </div>
-          </div>
-        </main>
-      </div>
+          {tasks.length > 0 ? (
+            <>
+              {tasks.map((task) => (
+                <ItensTasks
+                  key={task.id}
+                  data={task}
+                  removeTask={handleRemoveTask}
+                  toggleTaskStatus={handleToggleTask}
+                />
+              ))}
+            </>
+          ) : (
+            <EmptyTask />
+          )}
+        </div>
+      </main>
     </body>
   )
 }

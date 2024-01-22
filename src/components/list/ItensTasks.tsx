@@ -1,17 +1,16 @@
 import { Check, Trash2 } from "lucide-react";
-
-import { ITask } from '../../App'
+import { ITask } from "../interfaces";
 
 interface ItensTasksProps {
   data: ITask
   removeTask: (id: number) => void
-  toggleTaskStatus: ({ id, value }: { id: number; value: boolean }) => void
+  toggleTaskStatus: (id: number, value: boolean) => void
 }
 
 export function ItensTasks({ data, removeTask, toggleTaskStatus }: ItensTasksProps ) {
   function handleTaskToggle() {
     const updatedValue = !data.isChecked;
-    toggleTaskStatus({ id: data.id, value: updatedValue })
+    toggleTaskStatus(data.id, updatedValue)
   }
 
   function handleRemove() {
@@ -25,9 +24,9 @@ export function ItensTasks({ data, removeTask, toggleTaskStatus }: ItensTasksPro
           <input
             type="checkbox"
             checked={data.isChecked}
-            readOnly
             className="hidden"
             onChange={handleTaskToggle}
+            readOnly
           />
 
           <div

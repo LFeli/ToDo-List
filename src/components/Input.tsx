@@ -6,8 +6,8 @@ export function Input({ ...rest }
   return (
     <input 
       type="text" 
-      placeholder="Adicione uma nova tarefa" 
-      className="rounded-lg p-4 flex-1 bg-gray-500 placeholder:text-gray-300"
+      placeholder="Adicionar nova tarefa" 
+      className="w-full rounded-lg px-4 py-3 bg-gray-500 placeholder:text-gray-300 placeholder:truncate"
       {...rest}
     />
   )
